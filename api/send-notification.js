@@ -1,6 +1,6 @@
 const admin = require('firebase-admin');
 const bodyParser = require('body-parser');
-require('dotenv').config();  // Load environment variables
+require('dotenv').config(); // Load environment variables
 
 // Create service account credentials using environment variables
 const serviceAccount = {
@@ -21,17 +21,32 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
+// API Route with CORS enabled
 module.exports = async (req, res) => {
-  if (req.method !== 'POST') {
-    return res.status(405).send('Method Not Allowed');
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Allow all origins
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  // Handle OPTIONS method
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end(); // End the preflight request
   }
 
+  // Allow only POST requests
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method Not Allowed' });
+  }
+
+  // Parse the request body
   const { token, amount } = req.body;
 
+  // Validate the request body
   if (!token || !amount) {
-    return res.status(400).send('Missing token or amount');
+    return res.status(400).json({ error: 'Missing token or amount' });
   }
 
+  // Create the notification message
   const message = {
     notification: {
       title: 'Transfer Approval Required',
@@ -41,11 +56,12 @@ module.exports = async (req, res) => {
   };
 
   try {
+    // Send the notification using Firebase Admin SDK
     const response = await admin.messaging().send(message);
     console.log('Successfully sent message:', response);
-    res.status(200).send('Notification sent successfully');
+    return res.status(200).json({ success: 'Notification sent successfully' });
   } catch (error) {
     console.error('Error sending message:', error);
-    res.status(500).send('Failed to send notification',error);
+    return res.status(500).json({ error: 'Failed to send notification' });
   }
 };
