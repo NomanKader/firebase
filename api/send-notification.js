@@ -1,13 +1,6 @@
-const express = require('express');
 const admin = require('firebase-admin');
 const bodyParser = require('body-parser');
 require('dotenv').config();  // Load environment variables
-
-// Initialize Express app
-const app = express();
-
-// Use body-parser to parse JSON bodies into JS objects
-app.use(bodyParser.json());
 
 // Create service account credentials using environment variables
 const serviceAccount = {
@@ -28,13 +21,11 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.status(200).send('Hello, world!');
-});
+module.exports = async (req, res) => {
+  if (req.method !== 'POST') {
+    return res.status(405).send('Method Not Allowed');
+  }
 
-// Endpoint to handle sending notifications
-app.post('/send-notification', async (req, res) => {
   const { token, amount } = req.body;
 
   if (!token || !amount) {
@@ -57,10 +48,4 @@ app.post('/send-notification', async (req, res) => {
     console.error('Error sending message:', error);
     res.status(500).send('Failed to send notification');
   }
-});
-
-// Start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+};
