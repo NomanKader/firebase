@@ -28,6 +28,11 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).send('Hello, world!');
+});
+
 // Endpoint to handle sending notifications
 app.post('/send-notification', async (req, res) => {
   const { token, amount } = req.body;
