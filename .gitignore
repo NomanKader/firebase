@@ -36,3 +36,4 @@ coverage/
 # Ignore temporary files
 .tmp/
 *.tmp
+.vercel

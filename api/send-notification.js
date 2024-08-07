@@ -46,6 +46,6 @@ module.exports = async (req, res) => {
     res.status(200).send('Notification sent successfully');
   } catch (error) {
     console.error('Error sending message:', error);
-    res.status(500).send('Failed to send notification');
+    res.status(500).send('Failed to send notification',error);
   }
 };
