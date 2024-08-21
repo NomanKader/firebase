@@ -50,7 +50,12 @@ module.exports = async (req, res) => {
   const message = {
     notification: {
       title: 'Transfer Approval Required',
-      body: `You have a transfer request of ${amount} for approval.`,
+      body: `You have a transfer request of ${amount} for approval.`,      
+    },
+    data:{            
+      account:"zuzuzan11",
+      amount:amount,
+      navigationId:"LoginFromNotiScreen"
     },
     token: "fCWRZ4I2Tm-Li2RR_YQCd6:APA91bFwixvMKJhNnMMkUyooyphODIJO4ORu_9EJEDCIArrbl-oUyeRhWFwcSsvsBrZc5t_BFcZU_OvM_KPadR76oOgi4CTIXURZVVa0wCLHAjOMAPEKg_U79ckk8scUvICnzQTQuFYo",
   };
