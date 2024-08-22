@@ -57,10 +57,11 @@ module.exports = async (req, res) => {
       amount:amount,
       navigationId:"LoginFromNotiScreen"
     },
-    token: token,
+    token: "f_TvOG8UTjCrpysjuebs6p:APA91bHLob0pXv2H63EYns9XpXRUtPtcaiv_ndlR5reCwBbWdBQaNyfx2DTGf0sBvyLJFkegbdgWmtT8yH4HzBeJaA0UBbwKUJOjhjThMUn3pv_NU-V5ajd6sjKqzfHrWLQXCSZkekLU",
   };
 
   try {
+    console.log("Message",message);
     // Send the notification using Firebase Admin SDK
     const response = await admin.messaging().send(message);
     console.log('Successfully sent message:', response);
